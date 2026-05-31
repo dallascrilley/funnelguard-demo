@@ -1,0 +1,348 @@
+{
+  "scenario": "acme-q2",
+  "label": "Acme Corp — Q2 Funnel Config",
+  "description": "A Q2 launch that quietly broke attribution. Real campaigns ran. A retired retargeting campaign wasn't cleaned up. A blog post went live with the wrong UTM medium. A new pricing form launched with no owner assignment. The support team enabled a support ticket form without knowing it had a lifecycle-stage action.",
+  "scannedObjectCount": 38,
+  "utmTaxonomy": {
+    "validSources": ["google", "linkedin", "newsletter", "webinar", "blog", "partner", "direct", "tradeshow"],
+    "validMediums": ["cpc", "paid_social", "email", "event", "organic", "referral", "display"],
+    "retiredCampaigns": ["q1-retargeting", "q1-demo-day", "2025-fall-launch"]
+  },
+  "campaigns": [
+    {
+      "id": "camp-001",
+      "name": "Q2-Paid-Search-Google",
+      "utmSource": "google",
+      "utmMedium": "cpc",
+      "utmCampaign": "q2-paid-search",
+      "status": "active",
+      "defect": null
+    },
+    {
+      "id": "camp-002",
+      "name": "Q2-LinkedIn-Sponsored",
+      "utmSource": "linkedin",
+      "utmMedium": "paid_social",
+      "utmCampaign": "q2-linkedin",
+      "status": "active",
+      "defect": null
+    },
+    {
+      "id": "camp-003",
+      "name": "Q2-Email-Newsletter",
+      "utmSource": "newsletter",
+      "utmMedium": "email",
+      "utmCampaign": "q2-newsletter",
+      "status": "active",
+      "defect": null
+    },
+    {
+      "id": "camp-004",
+      "name": "Q2-Webinar-April",
+      "utmSource": "webinar",
+      "utmMedium": "event",
+      "utmCampaign": "q2-webinar-apr",
+      "status": "active",
+      "defect": null
+    },
+    {
+      "id": "camp-005",
+      "name": "Q1-Retargeting-RETIRED",
+      "utmSource": "google",
+      "utmMedium": "cpc",
+      "utmCampaign": "q1-retargeting",
+      "status": "retired",
+      "defect": "RETIRED campaign still attributing 22 live contacts"
+    },
+    {
+      "id": "camp-006",
+      "name": "Blog-Organic",
+      "utmSource": "blog",
+      "utmMedium": "cpc",
+      "utmCampaign": "blog-traffic",
+      "status": "active",
+      "defect": "utm_medium=cpc on organic blog channel — taxonomy collision"
+    },
+    {
+      "id": "camp-007",
+      "name": "Q2-Tradeshow-Boston",
+      "utmSource": "tradeshow",
+      "utmMedium": "event",
+      "utmCampaign": null,
+      "status": "active",
+      "defect": "Missing utm_campaign value"
+    },
+    {
+      "id": "camp-008",
+      "name": "Partner-Referral",
+      "utmSource": "partner",
+      "utmMedium": "referral",
+      "utmCampaign": "partner-referral-2025",
+      "status": "active",
+      "defect": null
+    }
+  ],
+  "forms": [
+    {
+      "id": "fg-contact-001",
+      "name": "Contact Us",
+      "lifecycleStageAssigned": "Lead",
+      "lifecycleStageOverwrite": false,
+      "workflowEnrollments": ["wf-sales-notify", "wf-owner-assign"],
+      "ownerAssigned": true,
+      "thankYouUrl": "/thank-you",
+      "crmIntegration": true,
+      "defect": null
+    },
+    {
+      "id": "fg-trial-002",
+      "name": "Free Trial Request",
+      "lifecycleStageAssigned": "MQL",
+      "lifecycleStageOverwrite": false,
+      "workflowEnrollments": ["wf-trial-nurture", "wf-owner-assign"],
+      "ownerAssigned": true,
+      "thankYouUrl": "/trial/thank-you",
+      "crmIntegration": true,
+      "defect": null
+    },
+    {
+      "id": "fg-webinar-003",
+      "name": "Webinar Registration",
+      "lifecycleStageAssigned": "Lead",
+      "lifecycleStageOverwrite": false,
+      "workflowEnrollments": ["wf-webinar-followup"],
+      "ownerAssigned": false,
+      "thankYouUrl": "/webinar/thank-you",
+      "crmIntegration": true,
+      "defect": null
+    },
+    {
+      "id": "fg-ebook-004",
+      "name": "Content Download — Ebook",
+      "lifecycleStageAssigned": "Lead",
+      "lifecycleStageOverwrite": false,
+      "workflowEnrollments": [],
+      "ownerAssigned": false,
+      "thankYouUrl": "/resources/thank-you",
+      "crmIntegration": true,
+      "defect": "No workflow enrollment — leads collected and forgotten"
+    },
+    {
+      "id": "fg-pricing-005",
+      "name": "Pricing Page Inquiry",
+      "lifecycleStageAssigned": "MQL",
+      "lifecycleStageOverwrite": false,
+      "workflowEnrollments": [],
+      "ownerAssigned": false,
+      "thankYouUrl": "/pricing/thank-you",
+      "crmIntegration": true,
+      "defect": "MQL with no owner assignment, no workflow enrollment"
+    },
+    {
+      "id": "fg-demo-006",
+      "name": "Demo Request",
+      "lifecycleStageAssigned": "SQL",
+      "lifecycleStageOverwrite": false,
+      "workflowEnrollments": ["wf-demo-confirm", "wf-owner-assign"],
+      "ownerAssigned": true,
+      "thankYouUrl": "/demo/thank-you",
+      "crmIntegration": true,
+      "defect": null
+    },
+    {
+      "id": "fg-newsletter-007",
+      "name": "Newsletter Signup",
+      "lifecycleStageAssigned": "Subscriber",
+      "lifecycleStageOverwrite": false,
+      "workflowEnrollments": ["wf-newsletter-welcome"],
+      "ownerAssigned": false,
+      "thankYouUrl": "/newsletter/thank-you",
+      "crmIntegration": true,
+      "defect": null
+    },
+    {
+      "id": "fg-partner-008",
+      "name": "Partner Application",
+      "lifecycleStageAssigned": "Lead",
+      "lifecycleStageOverwrite": false,
+      "workflowEnrollments": [],
+      "ownerAssigned": false,
+      "listEnrollments": [],
+      "thankYouUrl": "/partners/thank-you",
+      "crmIntegration": true,
+      "defect": "No list, no workflow — partner leads invisible to automation"
+    },
+    {
+      "id": "fg-exit-002",
+      "name": "Exit Intent Popup",
+      "lifecycleStageAssigned": "Lead",
+      "lifecycleStageOverwrite": false,
+      "workflowEnrollments": ["wf-reengage"],
+      "ownerAssigned": false,
+      "thankYouUrl": "/thank-you",
+      "crmIntegration": true,
+      "defect": "Form ID fg-exit-002 but Re-Engage workflow triggers on fg-exit-003"
+    },
+    {
+      "id": "fg-event-010",
+      "name": "Event Check-In",
+      "lifecycleStageAssigned": "Lead",
+      "lifecycleStageOverwrite": false,
+      "workflowEnrollments": [],
+      "ownerAssigned": false,
+      "thankYouUrl": "/events/thank-you-boston",
+      "thankYouUrl404": true,
+      "crmIntegration": true,
+      "defect": "Thank-you redirect /events/thank-you-boston returns 404"
+    },
+    {
+      "id": "fg-support-011",
+      "name": "Support Ticket",
+      "lifecycleStageAssigned": "Lead",
+      "lifecycleStageOverwrite": true,
+      "workflowEnrollments": [],
+      "ownerAssigned": false,
+      "thankYouUrl": "/support/thank-you",
+      "crmIntegration": true,
+      "defect": "Overwrites lifecycle stage to Lead — demotes Customer-stage contacts"
+    },
+    {
+      "id": "fg-careers-012",
+      "name": "Careers Interest",
+      "lifecycleStageAssigned": null,
+      "lifecycleStageOverwrite": false,
+      "workflowEnrollments": [],
+      "ownerAssigned": false,
+      "thankYouUrl": "/careers/thank-you",
+      "crmIntegration": false,
+      "defect": "No CRM integration — form data goes nowhere"
+    }
+  ],
+  "lifecycleStages": ["Subscriber", "Lead", "MQL", "SQL", "Customer"],
+  "contacts": [
+    {
+      "segment": "unowned-mqls",
+      "count": 14,
+      "lifecycleStage": "MQL",
+      "ownerAssigned": false,
+      "activeWorkflows": [],
+      "defect": "14 MQL contacts with null owner"
+    },
+    {
+      "segment": "customers-in-lead-nurture",
+      "count": 7,
+      "lifecycleStage": "Customer",
+      "ownerAssigned": true,
+      "activeWorkflows": ["wf-lead-nurture-q2"],
+      "defect": "7 Customer-stage contacts enrolled in Lead Nurture Q2"
+    },
+    {
+      "segment": "stale-sqls",
+      "count": 3,
+      "lifecycleStage": "SQL",
+      "ownerAssigned": true,
+      "lastOwnerActivityDays": 92,
+      "openOpportunity": false,
+      "activeWorkflows": [],
+      "defect": "3 SQL contacts with no owner activity in 90+ days"
+    },
+    {
+      "segment": "retired-campaign-contacts",
+      "count": 22,
+      "lifecycleStage": "Lead",
+      "attributionSource": "q1-retargeting",
+      "activeWorkflows": [],
+      "defect": "22 contacts attributed to retired q1-retargeting campaign"
+    }
+  ],
+  "workflows": [
+    {
+      "id": "wf-trial-nurture",
+      "name": "Trial Nurture",
+      "status": "active",
+      "stepCount": 6,
+      "enrollmentTriggers": ["fg-trial-002"],
+      "activeEnrollments": 41,
+      "defect": null
+    },
+    {
+      "id": "wf-sales-notify",
+      "name": "Sales Notify",
+      "status": "active",
+      "stepCount": 1,
+      "enrollmentTriggers": ["fg-contact-001", "fg-demo-006"],
+      "activeEnrollments": 18,
+      "defect": null
+    },
+    {
+      "id": "wf-demo-confirm",
+      "name": "Demo Confirm",
+      "status": "active",
+      "stepCount": 3,
+      "enrollmentTriggers": ["fg-demo-006"],
+      "activeEnrollments": 12,
+      "defect": null
+    },
+    {
+      "id": "wf-lead-nurture-q2",
+      "name": "Lead Nurture Q2",
+      "status": "active",
+      "stepCount": 8,
+      "enrollmentTriggers": [],
+      "activeEnrollments": 147,
+      "customerStageEnrolled": 7,
+      "defect": "7 Customer-stage contacts actively enrolled — wrong audience"
+    },
+    {
+      "id": "wf-owner-assign",
+      "name": "Owner Assign Round-Robin",
+      "status": "active",
+      "stepCount": 1,
+      "enrollmentTriggers": ["fg-contact-001", "fg-trial-002", "fg-demo-006", "fg-webinar-003"],
+      "missingTriggers": ["fg-pricing-005"],
+      "activeEnrollments": 71,
+      "defect": "Pricing Page Inquiry (fg-pricing-005) missing from enrollment triggers"
+    },
+    {
+      "id": "wf-reengage",
+      "name": "Re-Engage",
+      "status": "active",
+      "stepCount": 4,
+      "enrollmentTriggers": [],
+      "enrollmentFormIdExpected": "fg-exit-003",
+      "enrollmentFormIdActual": "fg-exit-002",
+      "activeEnrollments": 0,
+      "totalEnrollmentsAllTime": 0,
+      "defect": "Trigger expects form ID fg-exit-003; actual form ID is fg-exit-002 — zero enrollments ever"
+    },
+    {
+      "id": "wf-webinar-followup",
+      "name": "Webinar Follow-Up",
+      "status": "active",
+      "stepCount": 3,
+      "enrollmentTriggers": ["fg-webinar-003"],
+      "activeEnrollments": 28,
+      "defect": null
+    },
+    {
+      "id": "wf-newsletter-welcome",
+      "name": "Newsletter Welcome",
+      "status": "active",
+      "stepCount": 2,
+      "enrollmentTriggers": ["fg-newsletter-007"],
+      "activeEnrollments": 203,
+      "defect": null
+    },
+    {
+      "id": "wf-q1-demo-followup",
+      "name": "Q1 Demo Day Follow-Up",
+      "status": "active",
+      "stepCount": 4,
+      "enrollmentTriggers": [],
+      "triggerCampaign": "q1-demo-day",
+      "activeEnrollments": 0,
+      "totalEnrollmentsLast180Days": 0,
+      "defect": "Orphaned — trigger campaign q1-demo-day is retired; zero enrollments in 180 days"
+    }
+  ]
+}

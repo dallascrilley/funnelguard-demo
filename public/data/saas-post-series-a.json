@@ -1,0 +1,171 @@
+{
+  "scenario": "saas-post-series-a",
+  "label": "SaaS Startup — Post-Series A",
+  "description": "A Series A company that scaled GTM faster than their ops stack. Lifecycle logic never caught up with the new ICP. Attribution is technically present but practically meaningless.",
+  "scannedObjectCount": 24,
+  "utmTaxonomy": {
+    "validSources": ["google", "linkedin", "referral", "direct", "content", "partner"],
+    "validMediums": ["cpc", "paid_social", "organic", "referral", "email"],
+    "retiredCampaigns": ["seed-brand-2024", "beta-launch-2024"]
+  },
+  "campaigns": [
+    {
+      "id": "sc-001",
+      "name": "Series-A-Announcement",
+      "utmSource": "linkedin",
+      "utmMedium": "paid_social",
+      "utmCampaign": "series-a-2025",
+      "status": "active",
+      "defect": null
+    },
+    {
+      "id": "sc-002",
+      "name": "Seed-Brand-Retargeting",
+      "utmSource": "google",
+      "utmMedium": "cpc",
+      "utmCampaign": "seed-brand-2024",
+      "status": "retired",
+      "defect": "RETIRED seed campaign still attributing 11 contacts"
+    },
+    {
+      "id": "sc-003",
+      "name": "Content-Marketing-Organic",
+      "utmSource": "content",
+      "utmMedium": "paid_social",
+      "utmCampaign": "content-hub-q2",
+      "status": "active",
+      "defect": "utm_medium=paid_social on organic content channel — taxonomy mismatch"
+    },
+    {
+      "id": "sc-004",
+      "name": "Partner-Network-Q2",
+      "utmSource": "partner",
+      "utmMedium": "referral",
+      "utmCampaign": null,
+      "status": "active",
+      "defect": "Missing utm_campaign — partner traffic unattributable by campaign"
+    }
+  ],
+  "forms": [
+    {
+      "id": "sc-demo-001",
+      "name": "Book a Demo",
+      "lifecycleStageAssigned": "SQL",
+      "lifecycleStageOverwrite": false,
+      "workflowEnrollments": ["sc-wf-demo-routing"],
+      "ownerAssigned": true,
+      "thankYouUrl": "/demo/confirmed",
+      "crmIntegration": true,
+      "defect": null
+    },
+    {
+      "id": "sc-trial-002",
+      "name": "Start Free Trial",
+      "lifecycleStageAssigned": "MQL",
+      "lifecycleStageOverwrite": false,
+      "workflowEnrollments": [],
+      "ownerAssigned": false,
+      "thankYouUrl": "/trial/setup",
+      "crmIntegration": true,
+      "defect": "Trial signup — no owner assignment, no nurture enrollment"
+    },
+    {
+      "id": "sc-contact-003",
+      "name": "Contact Sales",
+      "lifecycleStageAssigned": "MQL",
+      "lifecycleStageOverwrite": true,
+      "workflowEnrollments": [],
+      "ownerAssigned": false,
+      "thankYouUrl": "/thank-you",
+      "crmIntegration": true,
+      "defect": "Overwrites lifecycle to MQL even for existing Customers"
+    },
+    {
+      "id": "sc-churn-004",
+      "name": "Cancellation Survey",
+      "lifecycleStageAssigned": "Lead",
+      "lifecycleStageOverwrite": true,
+      "workflowEnrollments": ["sc-wf-winback"],
+      "ownerAssigned": false,
+      "thankYouUrl": "/cancellation/thank-you",
+      "crmIntegration": true,
+      "defect": "Sets cancelling customers back to Lead lifecycle stage"
+    },
+    {
+      "id": "sc-webinar-005",
+      "name": "Webinar Signup",
+      "lifecycleStageAssigned": "Lead",
+      "lifecycleStageOverwrite": false,
+      "workflowEnrollments": [],
+      "ownerAssigned": false,
+      "thankYouUrl": "/webinar/thank-you",
+      "crmIntegration": true,
+      "defect": "No follow-up workflow — webinar leads go cold"
+    }
+  ],
+  "lifecycleStages": ["Lead", "MQL", "SQL", "Customer", "Churned"],
+  "contacts": [
+    {
+      "segment": "customers-in-lead-nurture",
+      "count": 12,
+      "lifecycleStage": "Customer",
+      "activeWorkflows": ["sc-wf-lead-nurture"],
+      "defect": "12 paying customers receiving lead-acquisition email sequences"
+    },
+    {
+      "segment": "churned-in-mql",
+      "count": 8,
+      "lifecycleStage": "MQL",
+      "attributionNote": "Previously Churned, re-set to MQL by Contact Sales form",
+      "defect": "8 churned contacts re-categorized as MQL — distorting pipeline metrics"
+    },
+    {
+      "segment": "unowned-trial-signups",
+      "count": 31,
+      "lifecycleStage": "MQL",
+      "ownerAssigned": false,
+      "defect": "31 trial signups with no owner — highest-intent segment unworked"
+    }
+  ],
+  "workflows": [
+    {
+      "id": "sc-wf-demo-routing",
+      "name": "Demo Request Routing",
+      "status": "active",
+      "stepCount": 3,
+      "enrollmentTriggers": ["sc-demo-001"],
+      "activeEnrollments": 9,
+      "defect": null
+    },
+    {
+      "id": "sc-wf-lead-nurture",
+      "name": "Lead Nurture — Post-Series-A",
+      "status": "active",
+      "stepCount": 10,
+      "enrollmentTriggers": [],
+      "activeEnrollments": 214,
+      "customerStageEnrolled": 12,
+      "defect": "12 Customer-stage contacts enrolled — wrong audience for acquisition nurture"
+    },
+    {
+      "id": "sc-wf-winback",
+      "name": "Win-Back Sequence",
+      "status": "active",
+      "stepCount": 5,
+      "enrollmentTriggers": ["sc-churn-004"],
+      "activeEnrollments": 14,
+      "defect": null
+    },
+    {
+      "id": "sc-wf-seed-followup",
+      "name": "Seed Era Product Launch",
+      "status": "active",
+      "stepCount": 6,
+      "enrollmentTriggers": [],
+      "triggerCampaign": "seed-brand-2024",
+      "activeEnrollments": 0,
+      "totalEnrollmentsLast180Days": 0,
+      "defect": "Orphaned workflow — seed campaign retired, zero enrollments in 180 days"
+    }
+  ]
+}

@@ -1,0 +1,180 @@
+{
+  "scenario": "ecommerce-brand",
+  "label": "E-Commerce Brand",
+  "description": "A DTC brand that bolted HubSpot onto their Shopify stack mid-growth. UTM discipline was never enforced. Meta campaigns tag everything as cpc. Google Shopping has no campaign values. Attribution is theater.",
+  "scannedObjectCount": 31,
+  "utmTaxonomy": {
+    "validSources": ["google", "meta", "email", "sms", "affiliate", "organic", "direct"],
+    "validMediums": ["cpc", "paid_social", "email", "sms", "affiliate", "organic"],
+    "retiredCampaigns": ["bfcm-2024", "summer-sale-2024", "new-year-2025"]
+  },
+  "campaigns": [
+    {
+      "id": "ec-001",
+      "name": "Google-Shopping-Spring",
+      "utmSource": "google",
+      "utmMedium": "cpc",
+      "utmCampaign": null,
+      "status": "active",
+      "defect": "No utm_campaign — shopping traffic unattributable by campaign"
+    },
+    {
+      "id": "ec-002",
+      "name": "Meta-Retargeting-Q2",
+      "utmSource": "meta",
+      "utmMedium": "cpc",
+      "utmCampaign": "meta-retargeting-q2",
+      "status": "active",
+      "defect": "utm_medium=cpc for Meta paid social — misclassified as paid search in attribution"
+    },
+    {
+      "id": "ec-003",
+      "name": "Email-Welcome-Series",
+      "utmSource": "email",
+      "utmMedium": "email",
+      "utmCampaign": "welcome-series",
+      "status": "active",
+      "defect": null
+    },
+    {
+      "id": "ec-004",
+      "name": "BFCM-2024-Retargeting",
+      "utmSource": "meta",
+      "utmMedium": "paid_social",
+      "utmCampaign": "bfcm-2024",
+      "status": "retired",
+      "defect": "RETIRED BFCM campaign still attributing 34 contacts"
+    },
+    {
+      "id": "ec-005",
+      "name": "Affiliate-Spring",
+      "utmSource": "affiliate",
+      "utmMedium": "affiliate",
+      "utmCampaign": "affiliate-spring-2025",
+      "status": "active",
+      "defect": null
+    },
+    {
+      "id": "ec-006",
+      "name": "Influencer-Campaign",
+      "utmSource": "instagram",
+      "utmMedium": "paid_social",
+      "utmCampaign": "influencer-q2",
+      "status": "active",
+      "defect": "utm_source=instagram not in declared valid sources (use 'meta')"
+    }
+  ],
+  "forms": [
+    {
+      "id": "ec-signup-001",
+      "name": "Email List Signup",
+      "lifecycleStageAssigned": "Subscriber",
+      "lifecycleStageOverwrite": false,
+      "workflowEnrollments": ["ec-wf-welcome"],
+      "ownerAssigned": false,
+      "thankYouUrl": "/signup/thank-you",
+      "crmIntegration": true,
+      "defect": null
+    },
+    {
+      "id": "ec-sms-002",
+      "name": "SMS Opt-In",
+      "lifecycleStageAssigned": "Subscriber",
+      "lifecycleStageOverwrite": false,
+      "workflowEnrollments": [],
+      "ownerAssigned": false,
+      "thankYouUrl": "/sms/thank-you",
+      "crmIntegration": true,
+      "defect": "No CRM workflow — SMS opt-in contacts not entered into any automation"
+    },
+    {
+      "id": "ec-quiz-003",
+      "name": "Product Finder Quiz",
+      "lifecycleStageAssigned": "Lead",
+      "lifecycleStageOverwrite": false,
+      "workflowEnrollments": [],
+      "ownerAssigned": false,
+      "thankYouUrl": "/quiz/results",
+      "crmIntegration": true,
+      "defect": "High-intent quiz completions with no follow-up automation"
+    },
+    {
+      "id": "ec-return-004",
+      "name": "Return Request Form",
+      "lifecycleStageAssigned": "Lead",
+      "lifecycleStageOverwrite": true,
+      "workflowEnrollments": [],
+      "ownerAssigned": false,
+      "thankYouUrl": "/returns/thank-you",
+      "crmIntegration": true,
+      "defect": "Overwrites lifecycle to Lead — demotes repeat customers submitting returns"
+    },
+    {
+      "id": "ec-wholesale-005",
+      "name": "Wholesale Inquiry",
+      "lifecycleStageAssigned": "Lead",
+      "lifecycleStageOverwrite": false,
+      "workflowEnrollments": [],
+      "ownerAssigned": false,
+      "listEnrollments": [],
+      "thankYouUrl": "/wholesale/thank-you",
+      "crmIntegration": true,
+      "defect": "Wholesale leads invisible — no list, no workflow, no notification"
+    }
+  ],
+  "lifecycleStages": ["Subscriber", "Lead", "Customer"],
+  "contacts": [
+    {
+      "segment": "retired-campaign-contacts",
+      "count": 34,
+      "lifecycleStage": "Lead",
+      "attributionSource": "bfcm-2024",
+      "defect": "34 contacts attributed to retired BFCM campaign"
+    },
+    {
+      "segment": "customers-lifecycle-reset",
+      "count": 19,
+      "lifecycleStage": "Lead",
+      "previousStage": "Customer",
+      "defect": "19 repeat customers reset to Lead by Return Request form"
+    },
+    {
+      "segment": "unworked-quiz-leads",
+      "count": 47,
+      "lifecycleStage": "Lead",
+      "activeWorkflows": [],
+      "defect": "47 quiz completions with zero follow-up automation"
+    }
+  ],
+  "workflows": [
+    {
+      "id": "ec-wf-welcome",
+      "name": "Email Welcome Series",
+      "status": "active",
+      "stepCount": 4,
+      "enrollmentTriggers": ["ec-signup-001"],
+      "activeEnrollments": 312,
+      "defect": null
+    },
+    {
+      "id": "ec-wf-winback",
+      "name": "Win-Back 90-Day",
+      "status": "active",
+      "stepCount": 3,
+      "enrollmentTriggers": [],
+      "activeEnrollments": 89,
+      "defect": null
+    },
+    {
+      "id": "ec-wf-bfcm-followup",
+      "name": "BFCM 2024 Follow-Up",
+      "status": "active",
+      "stepCount": 5,
+      "enrollmentTriggers": [],
+      "triggerCampaign": "bfcm-2024",
+      "activeEnrollments": 0,
+      "totalEnrollmentsLast180Days": 0,
+      "defect": "Orphaned BFCM workflow — campaign retired, zero enrollments in 180 days"
+    }
+  ]
+}

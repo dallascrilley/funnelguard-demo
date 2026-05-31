@@ -1,0 +1,175 @@
+---
+// Funnelguard — funnel-config linter demo
+// Static page; all data loaded client-side from /funnelguard/data/*.json
+import '../styles/funnelguard.css';
+const title = "Funnelguard — Your funnel is lying to you.";
+const description = "A static, client-side funnel-config linter that catches broken UTM taxonomy, orphaned forms, and lifecycle-stage logic errors before they corrupt attribution data and QBR reports.";
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="robots" content="noindex" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  </head>
+  <body>
+    <div class="fg-root" id="fg-app">
+
+      <!-- Nav -->
+      <nav class="fg-nav" aria-label="Funnelguard navigation">
+        <span class="fg-nav-logo">
+          <span class="fg-nav-logo-glyph" aria-hidden="true">▼</span>
+          funnelguard
+        </span>
+        <span class="fg-nav-sep" aria-hidden="true"></span>
+        <span class="fg-nav-label">Funnel Config Linter</span>
+        <span class="fg-nav-spacer"></span>
+        <span class="fg-nav-synthetic">SYNTHETIC DATA</span>
+      </nav>
+
+      <!-- Synthetic data banner -->
+      <div class="fg-banner" id="fg-banner" role="status" aria-live="polite">
+        <span class="fg-banner-icon" aria-hidden="true">SYN</span>
+        <p class="fg-banner-text">
+          <strong>Synthetic data only.</strong>
+          This demo runs on a fabricated HubSpot + GA4 + ad-account config — realistic in shape, fictional in fact.
+          No real CRM data, no API connections, no secrets.
+          The findings engine is real; the config it runs against is not.
+          <a href="#fg-config-section">View the synthetic config →</a>
+        </p>
+        <button class="fg-banner-dismiss" id="fg-banner-dismiss" aria-label="Dismiss banner">×</button>
+      </div>
+
+      <!-- Toolbar: scenario selector + filters -->
+      <div class="fg-toolbar" role="toolbar" aria-label="Scenario and filter controls">
+
+        <!-- Scenario selector -->
+        <div class="fg-scenario-wrap">
+          <span class="fg-scenario-label-text">Scenario</span>
+          <select class="fg-scenario-select" id="fg-scenario-select" aria-label="Select scenario">
+            <!-- Populated by app.ts -->
+          </select>
+        </div>
+
+        <span class="fg-toolbar-sep" aria-hidden="true"></span>
+
+        <!-- Severity filters -->
+        <div class="fg-filter-group" role="group" aria-label="Severity filters">
+          <span class="fg-filter-label">Severity</span>
+          <button class="fg-filter-btn fg-filter-active" data-sev-filter="Critical" aria-pressed="true">Critical</button>
+          <button class="fg-filter-btn fg-filter-active" data-sev-filter="Warning" aria-pressed="true">Warning</button>
+          <button class="fg-filter-btn fg-filter-active" data-sev-filter="Info" aria-pressed="true">Info</button>
+        </div>
+
+        <span class="fg-toolbar-sep" aria-hidden="true"></span>
+
+        <!-- Category filters -->
+        <div class="fg-filter-group" role="group" aria-label="Category filters">
+          <span class="fg-filter-label">Category</span>
+          <button class="fg-filter-btn fg-filter-active" data-cat-filter="UTM Integrity" aria-pressed="true">UTM Integrity</button>
+          <button class="fg-filter-btn fg-filter-active" data-cat-filter="Form Binding" aria-pressed="true">Form Binding</button>
+          <button class="fg-filter-btn fg-filter-active" data-cat-filter="Lifecycle Logic" aria-pressed="true">Lifecycle Logic</button>
+          <button class="fg-filter-btn fg-filter-active" data-cat-filter="Attribution Gap" aria-pressed="true">Attribution Gap</button>
+        </div>
+
+        <!-- Sort -->
+        <div class="fg-sort-wrap">
+          <label class="fg-filter-label" for="fg-sort">Sort</label>
+          <select class="fg-sort-select" id="fg-sort" aria-label="Sort findings by">
+            <option value="severity" selected>Severity</option>
+            <option value="category">Category</option>
+            <option value="id">Finding ID</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Summary strip (sticky, reactive) -->
+      <div class="fg-summary-strip" id="fg-summary-strip" role="status" aria-live="polite" aria-label="Findings summary">
+        <!-- Populated by app.ts -->
+        <span class="fg-sum-item">Loading…</span>
+      </div>
+
+      <!-- Main layout: findings + config viewer -->
+      <div class="fg-layout">
+
+        <!-- Findings list (left pane) -->
+        <main class="fg-findings-pane" aria-label="Findings">
+          <div class="fg-findings-list" id="fg-findings-list" role="list" aria-label="Funnel findings" aria-live="polite">
+            <!-- Populated by app.ts -->
+            <div class="fg-empty" aria-busy="true">Loading findings…</div>
+          </div>
+        </main>
+
+        <!-- Config viewer (right pane) -->
+        <aside class="fg-config-pane" id="fg-config-section" aria-label="Scanned configuration">
+          <div class="fg-config-header">
+            <span class="fg-config-title">// WHAT WE SCANNED</span>
+            <button
+              class="fg-config-toggle"
+              id="fg-config-toggle"
+              aria-expanded="true"
+              aria-controls="fg-config-viewer-body"
+            >
+              <span>collapse</span>
+              <span class="fg-config-toggle-chevron" aria-hidden="true">▾</span>
+            </button>
+          </div>
+          <div class="fg-config-viewer-body" id="fg-config-viewer-body" aria-hidden="false">
+            <!-- Populated by app.ts -->
+          </div>
+        </aside>
+
+      </div><!-- /.fg-layout -->
+
+      <!-- About / honest limits -->
+      <footer class="fg-about-section" id="fg-about">
+        <button
+          class="fg-about-toggle"
+          id="fg-about-toggle"
+          aria-expanded="false"
+          aria-controls="fg-about-body"
+        >
+          <span>About this demo — honest limits</span>
+          <span class="fg-about-chevron" aria-hidden="true">▾</span>
+        </button>
+        <div class="fg-about-body fg-collapsed" id="fg-about-body" role="region" aria-label="About Funnelguard">
+          <div class="fg-about-col">
+            <h3>What this is</h3>
+            <ul>
+              <li>Portfolio demo showing funnel-config linting concepts for RevOps / MarTech</li>
+              <li>Three synthetic funnel scenarios: Acme Corp Q2, SaaS Post-Series A, E-Commerce Brand</li>
+              <li>16 planted defects in the default scenario — each maps to a real class of ops mistake</li>
+              <li>Rule engine is deterministic, pure TypeScript, composable — each rule is an independent function</li>
+              <li>The FG-009 + FG-012 compounding failure is the signature finding: form demotes Customers, workflow catches them on the way down</li>
+            </ul>
+          </div>
+          <div class="fg-about-col">
+            <h3>Honest limits</h3>
+            <ul>
+              <li>No real HubSpot, GA4, Salesforce, Bizible, or Dreamdata connections — purely static JSON</li>
+              <li>No user-provided config upload — the three scenarios are the scan surface for v1</li>
+              <li>No auto-fix actions — findings describe the fix; no one-click apply</li>
+              <li>No mobile-optimized layout — desktop-first, 768px minimum</li>
+              <li>Contact counts are illustrative, not derived from real CRM data</li>
+              <li>The rule engine catches the classes of defect shown — not a complete UTM audit spec</li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+
+    </div><!-- /#fg-app -->
+
+    <script>
+      import '../components/app.ts';
+    </script>
+  </body>
+</html>
