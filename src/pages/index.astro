@@ -30,7 +30,7 @@ const description = "A static, client-side funnel-config linter that catches bro
           funnelguard
         </span>
         <span class="fg-nav-sep" aria-hidden="true"></span>
-        <span class="fg-nav-label">Funnel Config Linter</span>
+        <span class="fg-nav-label">Funnel Config Linter · live backend</span>
         <span class="fg-nav-spacer"></span>
         <span class="fg-nav-synthetic">SYNTHETIC DATA</span>
       </nav>
@@ -89,6 +89,16 @@ const description = "A static, client-side funnel-config linter that catches bro
             <option value="id">Finding ID</option>
           </select>
         </div>
+
+        <span class="fg-toolbar-sep" aria-hidden="true"></span>
+
+        <!-- Live backend: re-run the loaded config through POST /funnelguard/check -->
+        <button
+          class="fg-filter-btn fg-check-server-btn"
+          id="fg-check-server"
+          aria-label="Check the loaded config on the live backend"
+          title="POST the loaded config to /funnelguard/check and render the server's findings — proves the engine runs on a real backend, byte-identical to the client."
+        >⚡ Check on server</button>
 
       </div>
 

@@ -388,6 +388,65 @@ async function loadScenario(scenarioId: string): Promise<void> {
   renderFindings();
 }
 
+// ─── Server check (live backend, POST /funnelguard/check) ──────────────────────
+
+interface CheckResponse {
+  findings: Finding[];
+  counts: { Critical: number; Warning: number; Info: number };
+  error?: string;
+}
+
+/**
+ * Run the CURRENTLY-LOADED config against the LIVE Cloudflare Pages Function at
+ * POST /funnelguard/check. The server runs the same deterministic rule engine,
+ * so findings are byte-identical to the client path — this proves the demo has a
+ * real backend, not just client-side JS.
+ */
+async function checkOnServer(config: FunnelConfig): Promise<Finding[]> {
+  const res = await fetch('/funnelguard/check', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(config),
+  });
+  const payload = (await res.json().catch(() => null)) as CheckResponse | null;
+  if (!res.ok || !payload || payload.error) {
+    const message = payload && typeof payload.error === 'string' ? payload.error : `Server check failed (${res.status})`;
+    throw new Error(message);
+  }
+  return payload.findings ?? [];
+}
+
+function wireCheckServer(): void {
+  const btn = document.getElementById('fg-check-server') as HTMLButtonElement | null;
+  if (!btn) return;
+
+  btn.addEventListener('click', async () => {
+    if (!currentConfig) return;
+
+    const original = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = '… checking on server';
+    const scenarioLabel = document.getElementById('fg-scenario-label');
+
+    try {
+      const findings = await checkOnServer(currentConfig);
+      allFindings = findings;
+      renderFindings();
+      if (scenarioLabel) {
+        scenarioLabel.textContent = (scenarioLabel.textContent ?? '').replace(/ · via live backend$/, '') + ' · via live backend';
+      }
+    } catch (err) {
+      const list = document.getElementById('fg-findings-list');
+      if (list) {
+        list.innerHTML = `<div class="fg-empty">${escapeHtml(err instanceof Error ? err.message : 'Server check failed.')}</div>`;
+      }
+    } finally {
+      btn.disabled = false;
+      btn.textContent = original;
+    }
+  });
+}
+
 // ─── Scenario selector binding ────────────────────────────────────────────────
 
 function bindScenarioSelector(): void {
@@ -459,6 +518,7 @@ async function init(): Promise<void> {
   bindFilterControls();
   bindConfigViewerToggle();
   bindAboutToggle();
+  wireCheckServer();
 
   await loadScenario('acme-q2');
 }
