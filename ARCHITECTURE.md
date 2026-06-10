@@ -104,7 +104,7 @@ The engine reasons across object types — FG-005 (pricing form has no owner), F
 The raw config is rendered alongside findings. Clicking an affected-object reference in a finding scrolls the config viewer to that node and highlights it. This demonstrates familiarity with the data structures MarTech teams actually manage.
 
 ### 3. Severity-weighted summary
-The sticky summary strip shows counts by severity and category, updating as filters change — the situational awareness required when triaging a real funnel audit.
+An above-the-fold hero states the audit verdict for the loaded scenario — headline finding, severity rollup, and a stacked severity bar — before any scrolling. Below it, the sticky summary strip shows counts by severity and category, updating as filters change — the situational awareness required when triaging a real funnel audit.
 
 ### 4. Shared engine, two surfaces
 The same rules run client-side (instant) and on the live backend (provably real). The "Check on server" button re-runs the loaded config through `POST /funnelguard/check`; the findings match the in-browser pass exactly.
@@ -113,13 +113,13 @@ The same rules run client-side (instant) and on the live backend (provably real)
 
 | File | Responsibility |
 |---|---|
-| `src/pages/index.astro` | Shell: nav, banner, toolbar (scenario/filters/"Check on server"), findings, config viewer, about |
-| `src/components/app.ts` | Bootstrap, scenario loading, findings rendering, filter wiring, live-backend check |
+| `src/pages/index.astro` | Shell: nav, banner, verdict hero, toolbar (scenario/filters/"Check on server"), findings, config viewer, about |
+| `src/components/app.ts` | Bootstrap, scenario loading, hero verdict rendering, findings rendering, filter wiring, live-backend check |
 | `src/components/rules.ts` | All 13 rule implementations + `runRules` dispatcher (client) |
 | `functions/funnelguard/check.js` | Same engine as a Cloudflare Pages Function (`POST /funnelguard/check`) + body validation |
 | `tests/funnelguard-check.test.js` | `node --test`: all 13 rules (positive + clean) + 3 sample fixtures + `check()` validation |
 | `src/components/types.ts` | Shared interfaces |
-| `src/styles/funnelguard.css` | Dashboard layout, severity chips, config viewer |
+| `src/styles/funnelguard.css` | Broadsheet-editorial layout, verdict hero, severity chips, config viewer |
 
 ## What was cut for scope
 

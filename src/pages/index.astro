@@ -19,6 +19,7 @@ const description = "A static, client-side funnel-config linter that catches bro
     <meta name="robots" content="noindex" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=Newsreader:ital,opsz@0,6..72;1,6..72&family=IBM+Plex+Mono:wght@400;500&display=swap" />
   </head>
   <body>
     <div class="fg-root" id="fg-app">
@@ -48,6 +49,11 @@ const description = "A static, client-side funnel-config linter that catches bro
         <button class="fg-banner-dismiss" id="fg-banner-dismiss" aria-label="Dismiss banner">×</button>
       </div>
 
+      <!-- Hero: above-the-fold audit verdict + severity rollup (populated by app.ts) -->
+      <section class="fg-hero" id="fg-hero" aria-label="Audit verdict">
+        <div class="fg-hero-verdict-col"><span class="fg-hero-eyebrow">Auditing…</span></div>
+      </section>
+
       <!-- Toolbar: scenario selector + filters -->
       <div class="fg-toolbar" role="toolbar" aria-label="Scenario and filter controls">
 
@@ -55,7 +61,7 @@ const description = "A static, client-side funnel-config linter that catches bro
         <div class="fg-scenario-wrap">
           <span class="fg-scenario-label-text">Scenario</span>
           <select class="fg-scenario-select" id="fg-scenario-select" aria-label="Select scenario">
-            <!-- Populated by app.ts -->
+            <option disabled selected>Loading scenarios…</option>
           </select>
         </div>
 
@@ -113,6 +119,11 @@ const description = "A static, client-side funnel-config linter that catches bro
 
         <!-- Findings list (left pane) -->
         <main class="fg-findings-pane" aria-label="Findings">
+          <!-- Section kicker: broadsheet column header -->
+          <div class="fg-findings-kicker" aria-hidden="true">
+            <span class="fg-findings-kicker-label">Audit Findings</span>
+            <span class="fg-findings-kicker-rule" aria-hidden="true"></span>
+          </div>
           <div class="fg-findings-list" id="fg-findings-list" role="list" aria-label="Funnel findings" aria-live="polite">
             <!-- Populated by app.ts -->
             <div class="fg-empty" aria-busy="true">Loading findings…</div>

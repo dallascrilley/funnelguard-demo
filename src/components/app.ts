@@ -149,6 +149,7 @@ function renderFindings(): void {
   // Re-bind object ref clicks
   bindObjectRefs();
   updateSummaryStrip();
+  renderHero();
 }
 
 function updateSummaryStrip(): void {
@@ -173,6 +174,65 @@ function updateSummaryStrip(): void {
     <span class="fg-sum-sep">·</span>
     <span class="fg-sum-item fg-sum-scanned"><span class="fg-sum-count">${scanned}</span> Scanned objects</span>
   `;
+}
+
+// ─── Hero: above-the-fold audit verdict + severity rollup ───────────────────────
+
+function renderHero(): void {
+  const el = document.getElementById('fg-hero');
+  if (!el) return;
+  const crit = allFindings.filter((f) => f.severity === 'Critical').length;
+  const warn = allFindings.filter((f) => f.severity === 'Warning').length;
+  const info = allFindings.filter((f) => f.severity === 'Info').length;
+  const total = allFindings.length;
+  const scanned = currentConfig?.scannedObjectCount ?? 0;
+
+  // Headline = worst-severity finding (first in rule order).
+  const headline = [...allFindings].sort((a, b) => SEVERITY_ORDER[a.severity] - SEVERITY_ORDER[b.severity])[0];
+  const verdict =
+    crit > 0 ? `${crit} critical issue${crit === 1 ? '' : 's'} ${crit === 1 ? 'is' : 'are'} silently corrupting this funnel’s data.`
+    : warn > 0 ? `No criticals — but ${warn} warning${warn === 1 ? '' : 's'} will compound if left alone.`
+    : total > 0 ? `${total} low-severity note${total === 1 ? '' : 's'}. Nothing urgent.`
+    : 'Clean funnel — no findings.';
+  const sev = headline ? severityClass(headline.severity) : 'info';
+
+  el.className = `fg-hero fg-hero-${sev}`;
+  el.innerHTML = `
+    <div class="fg-hero-verdict-col">
+      <span class="fg-hero-eyebrow">Audit verdict · ${escapeHtml(currentConfig?.label ?? '')}</span>
+      <h1 class="fg-hero-verdict">${escapeHtml(verdict)}</h1>
+      ${headline ? `
+        <div class="fg-hero-lead">
+          <span class="fg-sev-badge fg-sevbadge-${sev}">${escapeHtml(headline.severity)}</span>
+          <span class="fg-hero-lead-cat">${escapeHtml(headline.category)}</span>
+        </div>
+        <p class="fg-hero-headline">${renderInlineCode(headline.headline)}</p>
+        ${headline.criticalContext ? `<p class="fg-hero-context">${renderInlineCode(headline.criticalContext.replace(/^Critical because:\s*/i, 'Critical because: '))}</p>` : ''}
+        <button class="fg-hero-cta" id="fg-hero-cta" data-finding-id="${escapeHtml(headline.id)}">Jump to ${escapeHtml(headline.id)} →</button>
+      ` : '<p class="fg-hero-headline">Every scanned object passed. Switch scenarios to see the engine bite.</p>'}
+    </div>
+    <div class="fg-hero-rollup" aria-label="Findings by severity">
+      <div class="fg-hero-rollup-head">${total} finding${total === 1 ? '' : 's'} · ${scanned} objects scanned</div>
+      <div class="fg-hero-rollup-stats">
+        <div class="fg-hero-stat fg-hero-stat-critical"><span class="fg-hero-num">${crit}</span><span class="fg-hero-stat-label">Critical</span></div>
+        <div class="fg-hero-stat fg-hero-stat-warning"><span class="fg-hero-num">${warn}</span><span class="fg-hero-stat-label">Warning</span></div>
+        <div class="fg-hero-stat fg-hero-stat-info"><span class="fg-hero-num">${info}</span><span class="fg-hero-stat-label">Info</span></div>
+      </div>
+      <div class="fg-hero-bar" role="img" aria-label="${crit} critical, ${warn} warning, ${info} info">
+        ${crit ? `<span class="fg-b-critical" style="flex:${crit}"></span>` : ''}
+        ${warn ? `<span class="fg-b-warning" style="flex:${warn}"></span>` : ''}
+        ${info ? `<span class="fg-b-info" style="flex:${info}"></span>` : ''}
+      </div>
+    </div>`;
+
+  document.getElementById('fg-hero-cta')?.addEventListener('click', (e) => {
+    const id = (e.currentTarget as HTMLElement).dataset.findingId;
+    const card = document.querySelector(`.fg-finding[data-id="${id}"]`) as HTMLElement | null;
+    if (!card) return;
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    card.classList.add('fg-finding-flash');
+    setTimeout(() => card.classList.remove('fg-finding-flash'), 1200);
+  });
 }
 
 // ─── Config viewer rendering ──────────────────────────────────────────────────
@@ -400,7 +460,7 @@ interface CheckResponse {
  * Run the CURRENTLY-LOADED config against the LIVE Cloudflare Pages Function at
  * POST /funnelguard/check. The server runs the same deterministic rule engine,
  * so findings are byte-identical to the client path — this proves the demo has a
- * real backend, not just client-side JS.
+ * real backend, not just client-side JS. (Mirrors apexlint's live-lint path.)
  */
 async function checkOnServer(config: FunnelConfig): Promise<Finding[]> {
   const res = await fetch('/funnelguard/check', {
