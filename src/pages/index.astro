@@ -17,58 +17,50 @@ const description = "A static, client-side funnel-config linter that catches bro
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="robots" content="noindex" />
-    <meta name="theme-color" content="#1f3b3c" />
+    <meta name="theme-color" content="#f4f4f6" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@75..100,700..800&family=Spline+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&family=DM+Mono:wght@400;500&display=swap" />
   </head>
   <body>
     <div class="fg-root" id="fg-app">
 
-      <!-- Nav -->
+      <!-- App bar: product identity + environment (scenario) switcher -->
       <nav class="fg-nav" aria-label="Funnelguard navigation">
         <span class="fg-nav-logo">
           <span class="fg-nav-logo-glyph" aria-hidden="true">▼</span>
-          funnelguard
+          Funnelguard
         </span>
-        <span class="fg-nav-sep" aria-hidden="true"></span>
-        <span class="fg-nav-label">Funnel Config Linter · live backend</span>
+        <span class="fg-nav-label">Funnel Config Linter</span>
         <span class="fg-nav-spacer"></span>
-        <span class="fg-nav-synthetic">SYNTHETIC DATA</span>
-      </nav>
-
-      <!-- Synthetic data banner -->
-      <div class="fg-banner" id="fg-banner" role="status" aria-live="polite">
-        <span class="fg-banner-icon" aria-hidden="true">SYN</span>
-        <p class="fg-banner-text">
-          <strong>Synthetic data only.</strong>
-          This demo runs on a fabricated HubSpot + GA4 + ad-account config — realistic in shape, fictional in fact.
-          No real CRM data, no API connections, no secrets.
-          The findings engine is real; the config it runs against is not.
-          <a href="#fg-config-section">View the synthetic config →</a>
-        </p>
-        <button class="fg-banner-dismiss" id="fg-banner-dismiss" aria-label="Dismiss banner">×</button>
-      </div>
-
-      <!-- Hero: above-the-fold audit verdict + severity rollup (populated by app.ts) -->
-      <section class="fg-hero" id="fg-hero" aria-label="Audit verdict">
-        <div class="fg-hero-verdict-col"><span class="fg-hero-eyebrow">Auditing…</span></div>
-      </section>
-
-      <!-- Toolbar: scenario selector + filters -->
-      <div class="fg-toolbar" role="toolbar" aria-label="Scenario and filter controls">
-
-        <!-- Scenario selector -->
         <div class="fg-scenario-wrap">
-          <span class="fg-scenario-label-text">Scenario</span>
+          <span class="fg-scenario-label-text" aria-hidden="true">Workspace</span>
           <select class="fg-scenario-select" id="fg-scenario-select" aria-label="Select scenario">
             <option disabled selected>Loading scenarios…</option>
           </select>
         </div>
+        <span class="fg-nav-synthetic">Synthetic data</span>
+      </nav>
 
-        <span class="fg-toolbar-sep" aria-hidden="true"></span>
+      <!-- Synthetic data notice -->
+      <div class="fg-banner" id="fg-banner" role="status" aria-live="polite">
+        <span class="fg-banner-icon" aria-hidden="true">i</span>
+        <p class="fg-banner-text">
+          <strong>Synthetic data only.</strong>
+          Fabricated HubSpot + GA4 + ad-account config — realistic in shape, fictional in fact. The findings engine is real; the config it runs against is not.
+          <a href="#fg-config-section">View the scanned config</a>
+        </p>
+        <button class="fg-banner-dismiss" id="fg-banner-dismiss" aria-label="Dismiss banner">×</button>
+      </div>
 
-        <!-- Severity filters -->
+      <!-- Audit overview: verdict card + severity KPIs (populated by app.ts) -->
+      <section class="fg-hero" id="fg-hero" aria-label="Audit verdict">
+        <div class="fg-hero-verdict-col"><span class="fg-hero-eyebrow">Auditing…</span></div>
+      </section>
+
+      <!-- Filter bar -->
+      <div class="fg-toolbar" role="toolbar" aria-label="Filter controls">
+
         <div class="fg-filter-group" role="group" aria-label="Severity filters">
           <span class="fg-filter-label">Severity</span>
           <button class="fg-filter-btn fg-filter-active" data-sev-filter="Critical" aria-pressed="true">Critical</button>
@@ -78,7 +70,6 @@ const description = "A static, client-side funnel-config linter that catches bro
 
         <span class="fg-toolbar-sep" aria-hidden="true"></span>
 
-        <!-- Category filters -->
         <div class="fg-filter-group" role="group" aria-label="Category filters">
           <span class="fg-filter-label">Category</span>
           <button class="fg-filter-btn fg-filter-active" data-cat-filter="UTM Integrity" aria-pressed="true">UTM Integrity</button>
@@ -87,7 +78,8 @@ const description = "A static, client-side funnel-config linter that catches bro
           <button class="fg-filter-btn fg-filter-active" data-cat-filter="Attribution Gap" aria-pressed="true">Attribution Gap</button>
         </div>
 
-        <!-- Sort -->
+        <span class="fg-toolbar-sep" aria-hidden="true"></span>
+
         <div class="fg-sort-wrap">
           <label class="fg-filter-label" for="fg-sort">Sort</label>
           <select class="fg-sort-select" id="fg-sort" aria-label="Sort findings by">
@@ -97,15 +89,13 @@ const description = "A static, client-side funnel-config linter that catches bro
           </select>
         </div>
 
-        <span class="fg-toolbar-sep" aria-hidden="true"></span>
-
         <!-- Live backend: re-run the loaded config through POST /funnelguard/check -->
         <button
           class="fg-filter-btn fg-check-server-btn"
           id="fg-check-server"
           aria-label="Check the loaded config on the live backend"
           title="POST the loaded config to /funnelguard/check and render the server's findings — proves the engine runs on a real backend, byte-identical to the client."
-        >⚡ Check on server</button>
+        >Check on server</button>
 
       </div>
 
@@ -115,14 +105,12 @@ const description = "A static, client-side funnel-config linter that catches bro
         <span class="fg-sum-item">Loading…</span>
       </div>
 
-      <!-- Main layout: findings + config viewer -->
+      <!-- Main layout: findings + config inspector -->
       <div class="fg-layout">
 
-        <!-- Findings list (left pane) -->
         <main class="fg-findings-pane" aria-label="Findings">
-          <!-- Section kicker: broadsheet column header -->
           <div class="fg-findings-kicker" aria-hidden="true">
-            <span class="fg-findings-kicker-label">Audit Findings</span>
+            <span class="fg-findings-kicker-label">Findings</span>
             <span class="fg-findings-kicker-rule" aria-hidden="true"></span>
           </div>
           <div class="fg-findings-list" id="fg-findings-list" role="list" aria-label="Funnel findings" aria-live="polite">
@@ -131,17 +119,16 @@ const description = "A static, client-side funnel-config linter that catches bro
           </div>
         </main>
 
-        <!-- Config viewer (right pane) -->
         <aside class="fg-config-pane" id="fg-config-section" aria-label="Scanned configuration">
           <div class="fg-config-header">
-            <span class="fg-config-title">// WHAT WE SCANNED</span>
+            <span class="fg-config-title">Scanned config</span>
             <button
               class="fg-config-toggle"
               id="fg-config-toggle"
               aria-expanded="true"
               aria-controls="fg-config-viewer-body"
             >
-              <span>collapse</span>
+              <span>Collapse</span>
               <span class="fg-config-toggle-chevron" aria-hidden="true">▾</span>
             </button>
           </div>
@@ -190,7 +177,7 @@ const description = "A static, client-side funnel-config linter that catches bro
     </div><!-- /#fg-app -->
 
     <script>
-      import '../components/app.ts';
+      import '../components/funnelguard/app.ts';
     </script>
   </body>
 </html>
