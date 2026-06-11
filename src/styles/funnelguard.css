@@ -5,7 +5,7 @@
    Think a financial broadsheet front page reporting on funnel defects.
    Explicitly light — no prefers-color-scheme dark block. */
 
-/* Fonts: loaded via <link> in index.astro <head> for faster FCP (no render-blocking @import). */
+/* Fonts: loaded via <link> in funnelguard/index.astro <head> for faster FCP (no render-blocking @import). */
 
 /* ─── Design tokens ──────────────────────────────────────────────────────── */
 :root {
@@ -473,6 +473,26 @@
   font-size: 13px;
   font-style: italic;
   text-align: center;
+}
+
+.fg-empty-reset {
+  display: inline-block;
+  margin-left: 6px;
+  font-family: var(--fg-font-ui);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  color: var(--fg-accent);
+  background: none;
+  border: 1px solid var(--fg-accent);
+  border-radius: 2px;
+  padding: 8px 14px;
+  min-height: 36px;
+  cursor: pointer;
+}
+.fg-empty-reset:hover {
+  background: var(--fg-accent);
+  color: var(--fg-surface);
 }
 
 /* ─── Finding rows — broadsheet ledger entries with column rules ─────────── */
@@ -1022,6 +1042,26 @@
 @media (max-width: 640px) {
   .fg-about-body {
     grid-template-columns: 1fr;
+  }
+
+  /* summary stats wrap inside the viewport instead of forcing page scroll */
+  .fg-summary-strip { flex-wrap: wrap; row-gap: 4px; }
+
+  /* mobile-sized targets for scenario/severity/category/sort/server controls */
+  .fg-scenario-select,
+  .fg-sort-select {
+    min-height: 40px;
+    font-size: 13px;
+  }
+  .fg-filter-btn {
+    min-height: 38px;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  .fg-config-toggle,
+  .fg-hero-cta {
+    min-height: 40px;
+    padding: 8px 14px;
   }
 }
 

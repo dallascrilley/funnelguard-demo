@@ -134,6 +134,16 @@ function renderFindingCard(finding: Finding): string {
 </div>`;
 }
 
+function resetFilters(): void {
+  activeSeverities = new Set(['Critical', 'Warning', 'Info']);
+  activeCategories = new Set(['UTM Integrity', 'Form Binding', 'Lifecycle Logic', 'Attribution Gap']);
+  document.querySelectorAll<HTMLButtonElement>('[data-sev-filter], [data-cat-filter]').forEach((btn) => {
+    btn.setAttribute('aria-pressed', 'true');
+    btn.classList.add('fg-filter-active');
+  });
+  renderFindings();
+}
+
 function renderFindings(): void {
   const list = document.getElementById('fg-findings-list');
   if (!list) return;
@@ -141,7 +151,10 @@ function renderFindings(): void {
   const filtered = getFilteredFindings();
 
   if (filtered.length === 0) {
-    list.innerHTML = '<div class="fg-empty">No findings match the current filters.</div>';
+    list.innerHTML =
+      '<div class="fg-empty">No findings match the current filters. ' +
+      '<button class="fg-empty-reset" type="button">Reset filters</button></div>';
+    list.querySelector('.fg-empty-reset')?.addEventListener('click', resetFilters);
   } else {
     list.innerHTML = filtered.map(renderFindingCard).join('');
   }
