@@ -2,6 +2,8 @@
 // Funnelguard — funnel-config linter demo
 // Static page; all data loaded client-side from /funnelguard/data/*.json
 import '../styles/funnelguard.css';
+import GuidedTour from '../components/demo/GuidedTour.astro';
+import { GUIDED_TOURS } from '../data/guidedTours';
 const title = "Funnelguard — Your funnel is lying to you.";
 const description = "A static, client-side funnel-config linter that catches broken UTM taxonomy, orphaned forms, and lifecycle-stage logic errors before they corrupt attribution data and QBR reports.";
 ---
@@ -52,6 +54,8 @@ const description = "A static, client-side funnel-config linter that catches bro
         </p>
         <button class="fg-banner-dismiss" id="fg-banner-dismiss" aria-label="Dismiss banner">×</button>
       </div>
+
+      <GuidedTour {...GUIDED_TOURS.funnelguard} />
 
       <!-- Audit overview: verdict card + severity KPIs (populated by app.ts) -->
       <section class="fg-hero" id="fg-hero" aria-label="Audit verdict">
