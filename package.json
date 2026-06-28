@@ -1,20 +1,23 @@
 {
-   "name": "funnelguard-demo",
-   "type": "module",
-   "version": "1.0.0",
-   "private": false,
-   "description": "Funnelguard — deterministic funnel/lifecycle config linter for MarTech/RevOps, with a live Cloudflare Pages Function backend. Public portfolio demo.",
-   "scripts": {
-      "dev": "astro dev",
-      "build": "astro build",
-      "preview": "astro preview",
-      "test": "node --test"
-   },
-   "dependencies": {
-      "astro": "^5.0.0"
-   },
-   "devDependencies": {
-      "typescript": "^5.6.0"
-   },
-   "packageManager": "pnpm@10.33.2"
+  "name": "funnelguard-demo",
+  "type": "module",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Funnelguard — deterministic funnel/lifecycle config linter for MarTech/RevOps, with a live Cloudflare Pages Function backend. Public portfolio demo.",
+  "exports": {
+    "./engine": "./src/components/engine.ts"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  },
+  "packageManager": "pnpm@10.33.2"
 }
