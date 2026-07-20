@@ -37,19 +37,19 @@ const description = "A static, client-side funnel-config linter that catches bro
         <span class="fg-nav-spacer"></span>
         <div class="fg-scenario-wrap">
           <span class="fg-scenario-label-text" aria-hidden="true">Workspace</span>
-          <select class="fg-scenario-select" id="fg-scenario-select" aria-label="Select scenario">
+          <select class="fg-scenario-select" id="fg-scenario-select" aria-label="Select sample funnel">
             <option disabled selected>Loading scenarios…</option>
           </select>
         </div>
-        <span class="fg-nav-synthetic">Synthetic data</span>
+        <span class="fg-nav-synthetic">Sample data</span>
       </nav>
 
       <!-- Synthetic data notice -->
       <div class="fg-banner" id="fg-banner" role="status" aria-live="polite">
         <span class="fg-banner-icon" aria-hidden="true">i</span>
         <p class="fg-banner-text">
-          <strong>Synthetic data only.</strong>
-          Fabricated HubSpot + GA4 + ad-account config — realistic in shape, fictional in fact. The findings engine is real; the config it runs against is not.
+          <strong>Sample data only.</strong>
+          These marketing setups are made up for the demo. The checker is real; the customer data is not.
           <a href="#fg-config-section">View the scanned config</a>
         </p>
         <button class="fg-banner-dismiss" id="fg-banner-dismiss" aria-label="Dismiss banner">×</button>
@@ -97,11 +97,13 @@ const description = "A static, client-side funnel-config linter that catches bro
         <button
           class="fg-filter-btn fg-check-server-btn"
           id="fg-check-server"
-          aria-label="Check the loaded config on the live backend"
-          title="POST the loaded config to /funnelguard/check and render the server's findings — proves the engine runs on a real backend, byte-identical to the client."
-        >Check on server</button>
+          aria-label="Run the loaded config through the live server checker"
+          title="Send the loaded setup to the live server and show the same rule findings there."
+        >Run server check</button>
 
       </div>
+
+      <div class="fg-server-status" id="fg-server-status" role="status" aria-live="polite" hidden></div>
 
       <!-- Summary strip (sticky, reactive) -->
       <div class="fg-summary-strip" id="fg-summary-strip" role="status" aria-live="polite" aria-label="Findings summary">
@@ -158,21 +160,21 @@ const description = "A static, client-side funnel-config linter that catches bro
           <div class="fg-about-col">
             <h3>What this is</h3>
             <ul>
-              <li>Portfolio demo showing funnel-config linting concepts for RevOps / MarTech</li>
-              <li>Three synthetic funnel scenarios: Acme Corp Q2, SaaS Post-Series A, E-Commerce Brand</li>
-              <li>16 planted defects in the default scenario — each maps to a real class of ops mistake</li>
-              <li>Rule engine is deterministic, pure TypeScript, composable — each rule is an independent function</li>
-              <li>The FG-009 + FG-012 compounding failure is the signature finding: form demotes Customers, workflow catches them on the way down</li>
+              <li>Portfolio demo that checks marketing funnel setup before bad tracking hits a board report</li>
+              <li>Three sample funnels: Acme Corp Q2, SaaS Post-Series A, and E-Commerce Brand</li>
+              <li>The default sample plants 16 common ops mistakes across campaigns, forms, and workflows</li>
+              <li>Rules are fixed and repeatable — same setup always returns the same findings</li>
+              <li>Signature pair: a form drops Customers back to Lead (FG-009), then a nurture workflow emails them as new leads (FG-012)</li>
             </ul>
           </div>
           <div class="fg-about-col">
             <h3>Honest limits</h3>
             <ul>
-              <li>No real HubSpot, GA4, Salesforce, Bizible, or Dreamdata connections — purely static JSON</li>
-              <li>No user-provided config upload — the three scenarios are the scan surface for v1</li>
-              <li>No auto-fix actions — findings describe the fix; no one-click apply</li>
-              <li>Contact counts are illustrative, not derived from real CRM data</li>
-              <li>The rule engine catches the classes of defect shown — not a complete UTM audit spec</li>
+              <li>No live CRM or analytics connection — you review sample JSON, not your real stack</li>
+              <li>No file upload in this demo — only the three built-in samples</li>
+              <li>No one-click fix — each finding explains the repair; a person still applies it</li>
+              <li>Contact counts are illustrative, not pulled from a real CRM</li>
+              <li>These rules cover the failure classes shown here, not every tracking edge case</li>
             </ul>
           </div>
         </div>

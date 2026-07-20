@@ -111,7 +111,7 @@ function renderFindingCard(finding: Finding): string {
   const isSignaturePart = finding.id === 'FG-009' || finding.id === 'FG-012';
   const signatureHtml = isSignaturePart
     ? `<div class="fg-signature-pair ${finding.id === 'FG-009' ? 'fg-sig-top' : 'fg-sig-bottom'}">
-        <span class="fg-sig-label">${finding.id === 'FG-009' ? '⟶ COMPOUNDING FAILURE — paired with FG-012' : '⟵ COMPOUNDING FAILURE — paired with FG-009'}</span>
+        <span class="fg-sig-label">${finding.id === 'FG-009' ? 'Linked issue — also see FG-012' : 'Linked issue — also see FG-009'}</span>
       </div>`
     : '';
 
@@ -472,7 +472,7 @@ interface CheckResponse {
 /**
  * Run the CURRENTLY-LOADED config against the LIVE Cloudflare Pages Function at
  * POST /funnelguard/check. The server runs the same deterministic rule engine,
- * so findings are byte-identical to the client path — this proves the demo has a
+ * so findings match the client path exactly — this proves the demo has a
  * real backend, not just client-side JS. (Mirrors apexlint's live-lint path.)
  */
 async function checkOnServer(config: FunnelConfig): Promise<Finding[]> {
@@ -489,6 +489,20 @@ async function checkOnServer(config: FunnelConfig): Promise<Finding[]> {
   return payload.findings ?? [];
 }
 
+function setServerStatus(kind: 'idle' | 'loading' | 'success' | 'error', message = ''): void {
+  const el = document.getElementById('fg-server-status');
+  if (!el) return;
+  if (kind === 'idle') {
+    el.hidden = true;
+    el.textContent = '';
+    el.className = 'fg-server-status';
+    return;
+  }
+  el.hidden = false;
+  el.className = `fg-server-status fg-server-status-${kind}`;
+  el.textContent = message;
+}
+
 function wireCheckServer(): void {
   const btn = document.getElementById('fg-check-server') as HTMLButtonElement | null;
   if (!btn) return;
@@ -496,23 +510,27 @@ function wireCheckServer(): void {
   btn.addEventListener('click', async () => {
     if (!currentConfig) return;
 
-    const original = btn.textContent;
+    const original = btn.textContent ?? 'Run server check';
     btn.disabled = true;
-    btn.textContent = '… checking on server';
-    const scenarioLabel = document.getElementById('fg-scenario-label');
+    btn.textContent = 'Checking on server…';
+    setServerStatus('loading', 'Sending this funnel setup to the live server…');
 
     try {
       const findings = await checkOnServer(currentConfig);
       allFindings = findings;
       renderFindings();
-      if (scenarioLabel) {
-        scenarioLabel.textContent = (scenarioLabel.textContent ?? '').replace(/ · via live backend$/, '') + ' · via live backend';
-      }
+      const crit = findings.filter((f) => f.severity === 'Critical').length;
+      const warn = findings.filter((f) => f.severity === 'Warning').length;
+      const info = findings.filter((f) => f.severity === 'Info').length;
+      setServerStatus(
+        'success',
+        `Server check complete — ${findings.length} finding${findings.length === 1 ? '' : 's'} (${crit} critical, ${warn} warning, ${info} info). Same results as the in-browser check.`
+      );
     } catch (err) {
-      const list = document.getElementById('fg-findings-list');
-      if (list) {
-        list.innerHTML = `<div class="fg-empty">${escapeHtml(err instanceof Error ? err.message : 'Server check failed.')}</div>`;
-      }
+      const message = err instanceof Error ? err.message : 'Server check failed.';
+      // Keep the last good client-side findings visible; surface the error inline.
+      renderFindings();
+      setServerStatus('error', `Server check failed: ${message}. Showing the last browser results.`);
     } finally {
       btn.disabled = false;
       btn.textContent = original;

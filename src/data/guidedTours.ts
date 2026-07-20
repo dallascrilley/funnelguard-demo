@@ -4,16 +4,16 @@ export const GUIDED_TOURS = {
     repoUrl: 'https://github.com/dallascrilley/funnelguard-demo',
     steps: [
       {
-        label: 'Pick a workspace config',
-        body: 'Choose a synthetic HubSpot/GA4/ad-account scenario with planted UTM, form-binding, lifecycle, and attribution defects.',
+        label: 'Pick a sample funnel',
+        body: 'Choose a sample marketing setup. Each one has real mistakes planted in campaigns, forms, lifecycle stages, and tracking tags.',
       },
       {
-        label: 'Check on the backend',
-        body: 'Check on server posts the loaded config to the Cloudflare backend and returns byte-identical rule findings.',
+        label: 'Run the server check',
+        body: 'Click “Run server check” to send the loaded setup to the live backend. You should see the same findings the browser already showed.',
       },
       {
         label: 'Follow the evidence',
-        body: 'Findings point to the scanned config, severity, category, and downstream business risk so the defect is not just a warning label.',
+        body: 'Open a finding to see severity, what broke, how to fix it, and jump to the matching object in the scanned config.',
       },
     ],
   },

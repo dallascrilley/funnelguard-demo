@@ -534,6 +534,33 @@ body {
 .fg-filter-btn.fg-check-server-btn:hover { background: oklch(32% 0.03 282); }
 .fg-filter-btn.fg-check-server-btn:disabled { opacity: 0.6; cursor: wait; }
 
+.fg-server-status {
+  margin: 0 var(--fg-space-3) var(--fg-space-2);
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--fg-r-sm);
+  font-size: 0.88rem;
+  line-height: 1.35;
+  border: 1px solid var(--fg-line);
+  background: var(--fg-card);
+  color: var(--fg-ink);
+}
+.fg-server-status[hidden] { display: none !important; }
+.fg-server-status-loading {
+  border-color: var(--fg-brand-line);
+  background: var(--fg-brand-tint);
+  color: var(--fg-brand-deep);
+}
+.fg-server-status-success {
+  border-color: oklch(65% 0.12 150 / 0.45);
+  background: oklch(96% 0.03 150);
+  color: oklch(32% 0.08 150);
+}
+.fg-server-status-error {
+  border-color: var(--fg-crit-line);
+  background: var(--fg-crit-tint);
+  color: var(--fg-crit-deep);
+}
+
 /* ── Summary strip (sticky, docked under filter bar) ──────── */
 .fg-summary-strip {
   position: sticky;
